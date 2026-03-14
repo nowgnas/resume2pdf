@@ -3,6 +3,7 @@ import type {
   ResumeData, CareerItem, EducationItem, SkillItem, CertificateItem,
   CustomSectionItem, CustomSectionEntry, CareerDescriptionItem, ProjectItem,
 } from '../types/resume'
+import { DEFAULT_SECTION_ORDER } from '../types/resume'
 
 const generateId = () => Math.random().toString(36).substr(2, 9)
 const STORAGE_KEY = 'resume2pdf_data'
@@ -16,6 +17,7 @@ const emptyData: ResumeData = {
   certificates: [],
   customSections: [],
   careerDescriptions: [],
+  sectionOrder: [...DEFAULT_SECTION_ORDER],
 }
 
 const sampleData: ResumeData = {
@@ -44,6 +46,7 @@ const sampleData: ResumeData = {
     { id: generateId(), name: '정보처리기사', issuer: '한국산업인력공단', date: '2018.11' },
   ],
   customSections: [],
+  sectionOrder: [...DEFAULT_SECTION_ORDER],
   careerDescriptions: [
     {
       id: generateId(),
@@ -61,7 +64,11 @@ const sampleData: ResumeData = {
 function loadFromStorage(): ResumeData | null {
   try {
     const saved = localStorage.getItem(STORAGE_KEY)
-    if (saved) return JSON.parse(saved) as ResumeData
+    if (saved) {
+      const parsed = JSON.parse(saved) as ResumeData
+      if (!parsed.sectionOrder) parsed.sectionOrder = [...DEFAULT_SECTION_ORDER]
+      return parsed
+    }
   } catch {}
   return null
 }
@@ -74,7 +81,7 @@ function reorderArray<T>(arr: T[], from: number, to: number): T[] {
 }
 
 export function useResumeStore() {
-  const [data, setData] = useState<ResumeData>(emptyData)
+  const [data, setData] = useState<ResumeData>(() => loadFromStorage() ?? emptyData)
   const [activeTab, setActiveTab] = useState<'resume' | 'career'>('resume')
 
   useEffect(() => {
@@ -201,6 +208,14 @@ export function useResumeStore() {
     }))
   }
 
+  // ── Section Order ──────────────────────────────────────────────────────────
+  const reorderSections = (from: number, to: number) => {
+    setData(prev => {
+      const current = prev.sectionOrder ?? [...DEFAULT_SECTION_ORDER]
+      return { ...prev, sectionOrder: reorderArray(current, from, to) }
+    })
+  }
+
   // ── Career Descriptions ────────────────────────────────────────────────────
   const addCareerDescription = () => {
     const item: CareerDescriptionItem = { id: generateId(), company: '', period: '', role: '', projects: [] }
@@ -285,6 +300,7 @@ export function useResumeStore() {
     reader.onload = (e) => {
       try {
         const parsed = JSON.parse(e.target?.result as string) as ResumeData
+        if (!parsed.sectionOrder) parsed.sectionOrder = [...DEFAULT_SECTION_ORDER]
         setData(parsed)
         onSuccess?.()
       } catch {
@@ -318,6 +334,7 @@ export function useResumeStore() {
     addCertificate, updateCertificate, removeCertificate, reorderCertificates,
     addCustomSection, updateCustomSectionTitle, removeCustomSection, reorderCustomSections,
     addCustomEntry, updateCustomEntry, removeCustomEntry, reorderCustomEntries,
+    reorderSections,
     addCareerDescription, updateCareerDescription, removeCareerDescription, reorderCareerDescriptions,
     addProject, updateProject, removeProject, reorderProjects,
     startNew, loadSaved, loadData, exportData, importData, resetData, loadSample,

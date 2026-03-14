@@ -104,12 +104,40 @@ interface SectionHeaderProps {
   title: string
   onAdd?: () => void
   addLabel?: string
+  onMoveUp?: () => void
+  onMoveDown?: () => void
 }
 
-export function SectionHeader({ title, onAdd, addLabel = '추가' }: SectionHeaderProps) {
+export function SectionHeader({ title, onAdd, addLabel = '추가', onMoveUp, onMoveDown }: SectionHeaderProps) {
   return (
     <div className="flex items-center justify-between mb-3">
-      <h3 className="text-sm font-semibold text-gray-800">{title}</h3>
+      <div className="flex items-center gap-1.5">
+        {(onMoveUp || onMoveDown) && (
+          <div className="flex flex-col gap-0.5">
+            <button
+              onClick={onMoveUp}
+              disabled={!onMoveUp}
+              className="w-4 h-4 flex items-center justify-center text-gray-300 hover:text-gray-500 disabled:opacity-0 disabled:cursor-default transition-colors"
+              title="위로 이동"
+            >
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 15l7-7 7 7" />
+              </svg>
+            </button>
+            <button
+              onClick={onMoveDown}
+              disabled={!onMoveDown}
+              className="w-4 h-4 flex items-center justify-center text-gray-300 hover:text-gray-500 disabled:opacity-0 disabled:cursor-default transition-colors"
+              title="아래로 이동"
+            >
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+          </div>
+        )}
+        <h3 className="text-sm font-semibold text-gray-800">{title}</h3>
+      </div>
       {onAdd && (
         <button
           onClick={onAdd}
