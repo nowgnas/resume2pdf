@@ -61,6 +61,15 @@ export interface ProjectItem {
   image?: string // base64 or url
 }
 
+export interface ProjectSummaryItem {
+  id: string
+  name: string
+  organization: string
+  period: string
+  techStack: string
+  summary: string
+}
+
 export interface CustomSectionEntry {
   id: string
   startDate: string
@@ -75,16 +84,17 @@ export interface CustomSectionItem {
   entries: CustomSectionEntry[]
 }
 
-export type SectionKey = 'introduction' | 'careers' | 'educations' | 'skills' | 'certificates' | 'customSections'
+export type SectionKey = 'introduction' | 'careers' | 'projects' | 'educations' | 'skills' | 'certificates' | 'customSections'
 
 export const DEFAULT_SECTION_ORDER: SectionKey[] = [
-  'introduction', 'careers', 'educations', 'skills', 'certificates', 'customSections',
+  'introduction', 'careers', 'projects', 'educations', 'skills', 'certificates', 'customSections',
 ]
 
 export interface ResumeData {
   personalInfo: PersonalInfo
   introduction: string
   careers: CareerItem[]
+  projects: ProjectSummaryItem[]
   educations: EducationItem[]
   skills: SkillItem[]
   certificates: CertificateItem[]
