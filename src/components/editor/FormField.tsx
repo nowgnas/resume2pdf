@@ -66,10 +66,17 @@ export function FormRichTextarea({ label, value, onChange, placeholder, rows = 3
     if (!isFocused.current && ref.current) ref.current.innerHTML = value || ''
   }, [value])
 
+  const sanitize = (html: string): string => {
+    const div = document.createElement('div')
+    div.innerHTML = html
+    div.querySelectorAll('*').forEach(el => el.removeAttribute('style'))
+    return div.innerHTML
+  }
+
   const handleBold = (e: React.MouseEvent) => {
     e.preventDefault()
     document.execCommand('bold')
-    if (ref.current) onChange(ref.current.innerHTML)
+    if (ref.current) onChange(sanitize(ref.current.innerHTML))
   }
 
   return (
@@ -90,7 +97,7 @@ export function FormRichTextarea({ label, value, onChange, placeholder, rows = 3
         contentEditable
         onFocus={() => { isFocused.current = true }}
         onBlur={() => { isFocused.current = false }}
-        onInput={() => { if (ref.current) onChange(ref.current.innerHTML) }}
+        onInput={() => { if (ref.current) onChange(sanitize(ref.current.innerHTML)) }}
         data-placeholder={placeholder}
         style={{ minHeight: `${rows * 1.6}rem` }}
         className="rich-textarea w-full px-2.5 py-1.5 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-blue-400 bg-white"

@@ -63,6 +63,12 @@ body {
   }
 }
 
+/* Rich text preview — force consistent font size for contenteditable-generated elements */
+.rich-content * {
+  font-size: inherit;
+  line-height: inherit;
+}
+
 /* Rich textarea placeholder */
 .rich-textarea:empty::before {
   content: attr(data-placeholder);
