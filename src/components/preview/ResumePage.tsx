@@ -55,7 +55,7 @@ export default function ResumePage({ data }: Props) {
       {/* Introduction */}
       {introduction && (
         <Section title="자기소개">
-          <p className="text-xs text-slate-600 leading-relaxed whitespace-pre-line">{introduction}</p>
+          <p className="text-xs text-slate-600 leading-relaxed" dangerouslySetInnerHTML={{ __html: introduction }} />
         </Section>
       )}
 
@@ -82,9 +82,7 @@ export default function ResumePage({ data }: Props) {
                     )}
                   </div>
                   {career.description && (
-                    <p className="text-xs text-slate-500 mt-1 whitespace-pre-line leading-relaxed">
-                      {career.description}
-                    </p>
+                    <p className="text-xs text-slate-500 mt-1 leading-relaxed" dangerouslySetInnerHTML={{ __html: career.description }} />
                   )}
                 </div>
               </div>
@@ -177,9 +175,7 @@ export default function ResumePage({ data }: Props) {
                   <div className="flex-1">
                     <div className="font-semibold text-slate-800 text-xs">{entry.name}</div>
                     {entry.description && (
-                      <p className="text-xs text-slate-500 mt-0.5 whitespace-pre-line leading-relaxed">
-                        {entry.description}
-                      </p>
+                      <p className="text-xs text-slate-500 mt-0.5 leading-relaxed" dangerouslySetInnerHTML={{ __html: entry.description }} />
                     )}
                   </div>
                 </div>

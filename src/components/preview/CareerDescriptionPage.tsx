@@ -75,9 +75,7 @@ function CareerDescSection({ item }: { item: CareerDescriptionItem }) {
                 </div>
 
                 {project.description && (
-                  <p className="text-xs text-slate-600 leading-relaxed mb-3 whitespace-pre-line">
-                    {project.description}
-                  </p>
+                  <p className="text-xs text-slate-600 leading-relaxed mb-3" dangerouslySetInnerHTML={{ __html: project.description }} />
                 )}
 
                 {project.techStack && (
@@ -99,9 +97,7 @@ function CareerDescSection({ item }: { item: CareerDescriptionItem }) {
                 {project.achievements && (
                   <div className="flex gap-2 items-start">
                     <span className="text-xs font-semibold text-slate-400 shrink-0 w-14 pt-0.5">주요 성과</span>
-                    <p className="text-xs text-slate-600 leading-relaxed whitespace-pre-line">
-                      {project.achievements}
-                    </p>
+                    <p className="text-xs text-slate-600 leading-relaxed" dangerouslySetInnerHTML={{ __html: project.achievements }} />
                   </div>
                 )}
               </div>

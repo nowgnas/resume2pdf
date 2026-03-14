@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import type { useResumeStore } from '../../store/resumeStore'
-import { FormInput, FormTextarea, SectionHeader, ItemCard } from './FormField'
+import { FormInput, FormRichTextarea, SectionHeader, ItemCard } from './FormField'
 import { DraggableList } from './DraggableList'
 
 type Store = ReturnType<typeof useResumeStore>
@@ -58,9 +58,9 @@ export default function CareerDescEditor({ store }: Props) {
                       <FormInput label="프로젝트명" value={project.name} onChange={v => updateProject(cd.id, project.id, 'name', v)} placeholder="프로젝트 이름" />
                       <FormInput label="기간" value={project.period} onChange={v => updateProject(cd.id, project.id, 'period', v)} placeholder="2022.06 ~ 2023.03" />
                     </div>
-                    <FormTextarea label="프로젝트 설명" value={project.description} onChange={v => updateProject(cd.id, project.id, 'description', v)} placeholder="프로젝트 개요 및 담당 역할을 설명하세요..." rows={3} />
+                    <FormRichTextarea label="프로젝트 설명" value={project.description} onChange={v => updateProject(cd.id, project.id, 'description', v)} placeholder="프로젝트 개요 및 담당 역할을 설명하세요..." rows={3} />
                     <FormInput label="기술 스택 (쉼표로 구분)" value={project.techStack} onChange={v => updateProject(cd.id, project.id, 'techStack', v)} placeholder="Python, FastAPI, PostgreSQL" />
-                    <FormTextarea label="주요 성과" value={project.achievements} onChange={v => updateProject(cd.id, project.id, 'achievements', v)} placeholder="• 성과 1&#10;• 성과 2" rows={3} />
+                    <FormRichTextarea label="주요 성과" value={project.achievements} onChange={v => updateProject(cd.id, project.id, 'achievements', v)} placeholder="• 성과 1&#10;• 성과 2" rows={3} />
                     <ProjectImageUpload image={project.image || ''} onChange={v => updateProject(cd.id, project.id, 'image', v)} />
                   </ItemCard>
                 )}

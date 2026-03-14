@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import type { useResumeStore } from '../../store/resumeStore'
-import { FormInput, FormTextarea, SectionHeader, ItemCard } from './FormField'
+import { FormInput, FormRichTextarea, SectionHeader, ItemCard } from './FormField'
 import { DraggableList } from './DraggableList'
 
 type Store = ReturnType<typeof useResumeStore>
@@ -66,7 +66,7 @@ export default function ResumeEditor({ store }: Props) {
       {/* Introduction */}
       <section>
         <SectionHeader title="자기소개" />
-        <FormTextarea label="" value={data.introduction} onChange={updateIntroduction} placeholder="자기소개를 입력하세요..." rows={4} />
+        <FormRichTextarea label="" value={data.introduction} onChange={updateIntroduction} placeholder="자기소개를 입력하세요..." rows={4} />
       </section>
 
       <Divider />
@@ -95,7 +95,7 @@ export default function ResumeEditor({ store }: Props) {
                   </label>
                 </div>
               </div>
-              <FormTextarea label="업무 내용" value={career.description} onChange={v => updateCareer(career.id, 'description', v)} placeholder="주요 업무를 간략히 입력하세요" rows={2} />
+              <FormRichTextarea label="업무 내용" value={career.description} onChange={v => updateCareer(career.id, 'description', v)} placeholder="주요 업무를 간략히 입력하세요" rows={2} />
             </ItemCard>
           )}
         />
@@ -221,7 +221,7 @@ export default function ResumeEditor({ store }: Props) {
                         <FormInput label="시작 날짜" value={entry.startDate} onChange={v => updateCustomEntry(section.id, entry.id, 'startDate', v)} placeholder="2023.03" />
                         <FormInput label="종료 날짜 (선택)" value={entry.endDate} onChange={v => updateCustomEntry(section.id, entry.id, 'endDate', v)} placeholder="2023.06" />
                       </div>
-                      <FormTextarea label="설명" value={entry.description} onChange={v => updateCustomEntry(section.id, entry.id, 'description', v)} placeholder="설명을 입력하세요..." rows={2} />
+                      <FormRichTextarea label="설명" value={entry.description} onChange={v => updateCustomEntry(section.id, entry.id, 'description', v)} placeholder="설명을 입력하세요..." rows={2} />
                     </ItemCard>
                   )}
                 />
