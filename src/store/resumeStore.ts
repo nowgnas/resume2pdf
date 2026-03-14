@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import type {
   ResumeData, CareerItem, EducationItem, SkillItem, CertificateItem,
-  CustomSectionItem, CustomSectionEntry, CareerDescriptionItem, ProjectItem,
+  CustomSectionItem, CustomSectionEntry, CareerDescriptionItem, ProjectItem, ProjectSummaryItem,
 } from '../types/resume'
 import { DEFAULT_SECTION_ORDER } from '../types/resume'
 
@@ -12,6 +12,7 @@ const emptyData: ResumeData = {
   personalInfo: { name: '', birthDate: '', phone: '', email: '', address: '', photo: '' },
   introduction: '',
   careers: [],
+  projects: [],
   educations: [],
   skills: [],
   certificates: [],
@@ -33,6 +34,9 @@ const sampleData: ResumeData = {
   careers: [
     { id: generateId(), company: '(주)테크컴퍼니', department: '개발팀', position: '백엔드 개발자', startDate: '2020.03', endDate: '', isCurrent: true, description: 'API 설계 및 개발, 서버 인프라 관리' },
     { id: generateId(), company: '(주)스타트업', department: '개발팀', position: '풀스택 개발자', startDate: '2018.06', endDate: '2020.02', isCurrent: false, description: '웹 서비스 개발 및 유지보수' },
+  ],
+  projects: [
+    { id: generateId(), name: '이력서 PDF 생성기', organization: '개인 프로젝트', period: '2024.01 ~ 2024.03', techStack: 'React, TypeScript, Tailwind CSS', summary: '브라우저에서 바로 이력서를 작성하고 PDF로 다운로드할 수 있는 웹 서비스 개발. 월 1,000명 이상 사용.' },
   ],
   educations: [
     { id: generateId(), school: '한국대학교', major: '컴퓨터공학과', degree: '학사', graduationStatus: '졸업', startDate: '2014.03', endDate: '2018.02', isCurrent: false, gpa: '3.8 / 4.5' },
@@ -61,14 +65,34 @@ const sampleData: ResumeData = {
   ],
 }
 
+function normalizeData(data: ResumeData): ResumeData {
+  // 누락된 배열 필드 기본값 채우기
+  if (!data.projects) data.projects = []
+  if (!data.careers) data.careers = []
+  if (!data.educations) data.educations = []
+  if (!data.skills) data.skills = []
+  if (!data.certificates) data.certificates = []
+  if (!data.customSections) data.customSections = []
+  if (!data.careerDescriptions) data.careerDescriptions = []
+
+  // sectionOrder에 없는 기본 섹션 추가 (새 카테고리가 생겼을 때 자동 포함)
+  if (!data.sectionOrder) {
+    data.sectionOrder = [...DEFAULT_SECTION_ORDER]
+  } else {
+    for (const key of DEFAULT_SECTION_ORDER) {
+      if (!data.sectionOrder.includes(key)) {
+        data.sectionOrder.push(key)
+      }
+    }
+  }
+
+  return data
+}
+
 function loadFromStorage(): ResumeData | null {
   try {
     const saved = localStorage.getItem(STORAGE_KEY)
-    if (saved) {
-      const parsed = JSON.parse(saved) as ResumeData
-      if (!parsed.sectionOrder) parsed.sectionOrder = [...DEFAULT_SECTION_ORDER]
-      return parsed
-    }
+    if (saved) return normalizeData(JSON.parse(saved) as ResumeData)
   } catch {}
   return null
 }
@@ -208,6 +232,21 @@ export function useResumeStore() {
     }))
   }
 
+  // ── Resume Projects ────────────────────────────────────────────────────────
+  const addResumeProject = () => {
+    const item: ProjectSummaryItem = { id: generateId(), name: '', organization: '', period: '', techStack: '', summary: '' }
+    setData(prev => ({ ...prev, projects: [...(prev.projects ?? []), item] }))
+  }
+  const updateResumeProject = (id: string, field: keyof ProjectSummaryItem, value: string) => {
+    setData(prev => ({ ...prev, projects: (prev.projects ?? []).map(p => p.id === id ? { ...p, [field]: value } : p) }))
+  }
+  const removeResumeProject = (id: string) => {
+    setData(prev => ({ ...prev, projects: (prev.projects ?? []).filter(p => p.id !== id) }))
+  }
+  const reorderResumeProjects = (from: number, to: number) => {
+    setData(prev => ({ ...prev, projects: reorderArray(prev.projects ?? [], from, to) }))
+  }
+
   // ── Section Order ──────────────────────────────────────────────────────────
   const reorderSections = (from: number, to: number) => {
     setData(prev => {
@@ -299,8 +338,7 @@ export function useResumeStore() {
     const reader = new FileReader()
     reader.onload = (e) => {
       try {
-        const parsed = JSON.parse(e.target?.result as string) as ResumeData
-        if (!parsed.sectionOrder) parsed.sectionOrder = [...DEFAULT_SECTION_ORDER]
+        const parsed = normalizeData(JSON.parse(e.target?.result as string) as ResumeData)
         setData(parsed)
         onSuccess?.()
       } catch {
@@ -334,6 +372,7 @@ export function useResumeStore() {
     addCertificate, updateCertificate, removeCertificate, reorderCertificates,
     addCustomSection, updateCustomSectionTitle, removeCustomSection, reorderCustomSections,
     addCustomEntry, updateCustomEntry, removeCustomEntry, reorderCustomEntries,
+    addResumeProject, updateResumeProject, removeResumeProject, reorderResumeProjects,
     reorderSections,
     addCareerDescription, updateCareerDescription, removeCareerDescription, reorderCareerDescriptions,
     addProject, updateProject, removeProject, reorderProjects,

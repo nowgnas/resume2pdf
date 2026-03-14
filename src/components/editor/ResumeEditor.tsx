@@ -19,6 +19,7 @@ export default function ResumeEditor({ store }: Props) {
     addCertificate, updateCertificate, removeCertificate, reorderCertificates,
     addCustomSection, updateCustomSectionTitle, removeCustomSection, reorderCustomSections,
     addCustomEntry, updateCustomEntry, removeCustomEntry, reorderCustomEntries,
+    addResumeProject, updateResumeProject, removeResumeProject, reorderResumeProjects,
     reorderSections,
   } = store
 
@@ -70,6 +71,29 @@ export default function ResumeEditor({ store }: Props) {
                     </div>
                   </div>
                   <FormRichTextarea label="업무 내용" value={career.description} onChange={v => updateCareer(career.id, 'description', v)} placeholder="주요 업무를 간략히 입력하세요" rows={2} />
+                </ItemCard>
+              )}
+            />
+          </section>
+        )
+
+      case 'projects':
+        return (
+          <section>
+            <SectionHeader title="프로젝트" onAdd={addResumeProject} {...arrows} />
+            <DraggableList
+              items={data.projects ?? []}
+              keyExtractor={p => p.id}
+              onReorder={reorderResumeProjects}
+              renderItem={(project) => (
+                <ItemCard onRemove={() => removeResumeProject(project.id)}>
+                  <FormInput label="프로젝트명" value={project.name} onChange={v => updateResumeProject(project.id, 'name', v)} placeholder="프로젝트 이름" />
+                  <div className="grid grid-cols-2 gap-2">
+                    <FormInput label="소속/조직" value={project.organization ?? ''} onChange={v => updateResumeProject(project.id, 'organization', v)} placeholder="(주)회사명, 개인 프로젝트 등" />
+                    <FormInput label="기간" value={project.period} onChange={v => updateResumeProject(project.id, 'period', v)} placeholder="2024.01 ~ 2024.03" />
+                  </div>
+                  <FormInput label="사용 기술 (쉼표로 구분)" value={project.techStack} onChange={v => updateResumeProject(project.id, 'techStack', v)} placeholder="React, TypeScript, ..." />
+                  <FormRichTextarea label="요약" value={project.summary} onChange={v => updateResumeProject(project.id, 'summary', v)} placeholder="무엇을 했는지, 성과가 있다면 수치로 작성하세요." rows={2} />
                 </ItemCard>
               )}
             />

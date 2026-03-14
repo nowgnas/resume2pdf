@@ -47,6 +47,41 @@ export default function ResumePage({ data }: Props) {
           </Section>
         ) : null
 
+      case 'projects': {
+        const projects = data.projects ?? []
+        return projects.length > 0 ? (
+          <Section key="projects" title="프로젝트">
+            <div className="space-y-3">
+              {projects.map((project) => (
+                <div key={project.id} className="flex gap-4">
+                  <div className="text-xs text-slate-400 shrink-0 w-28 pt-0.5">
+                    <div>{project.period}</div>
+                    {project.organization && <div className="mt-0.5 text-slate-400">{project.organization}</div>}
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-baseline gap-2 flex-wrap mb-1">
+                      <span className="font-semibold text-slate-800">{project.name}</span>
+                    </div>
+                    {project.techStack && (
+                      <div className="flex flex-wrap gap-1 mb-1">
+                        {project.techStack.split(',').map((tech, i, arr) => (
+                          <span key={i} className="text-xs text-slate-500 font-medium">
+                            {tech.trim()}{i < arr.length - 1 ? ' ·' : ''}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                    {project.summary && (
+                      <p className="text-xs text-slate-500 leading-relaxed" dangerouslySetInnerHTML={{ __html: project.summary }} />
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Section>
+        ) : null
+      }
+
       case 'educations':
         return educations.length > 0 ? (
           <Section key="educations" title="학력">
