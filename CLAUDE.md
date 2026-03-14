@@ -34,7 +34,7 @@ Single-page app with no router. State is managed by a single custom hook (`useRe
 - `reorderArray<T>` is a generic splice-based helper used by all reorder functions.
 
 **Two document types share the same `ResumeData`:**
-1. **이력서** — rendered by `ResumePage.tsx` as a single A4 page.
+1. **이력서** — rendered by `ResumePage.tsx` with automatic page splitting via `buildResumePages()` (height estimation per section). Sections that don't fit are pushed to a new `.a4-page` div. Page 2+ shows "이력서 (계속)" header.
 2. **경력 기술서** — rendered by `CareerDescriptionPage.tsx` with automatic page splitting via height estimation in `buildPages()`.
 
 **Rich text fields** (자기소개, 업무 내용, 프로젝트 설명, 주요 성과, 추가 항목 설명):
