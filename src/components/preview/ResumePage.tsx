@@ -145,8 +145,7 @@ export default function ResumePage({ data }: Props) {
       {/* Header: Personal Info — always first */}
       <div className="flex gap-6 mb-8">
         <div className="flex-1">
-          <h1 className="text-3xl font-bold text-slate-900 mb-1 tracking-tight">{personalInfo.name}</h1>
-          <div className="w-12 h-1 bg-indigo-400 rounded-full mb-4" />
+          <h1 className="text-3xl font-bold text-slate-900 mb-4 tracking-tight">{personalInfo.name}</h1>
           <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 text-xs text-slate-500">
             {personalInfo.birthDate && (
               <div className="flex items-center gap-2">

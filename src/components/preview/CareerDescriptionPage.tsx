@@ -25,7 +25,6 @@ export default function CareerDescriptionPages({ careerDescriptions }: Props) {
           {pageIdx === 0 && (
             <div className="mb-8">
               <h1 className="text-2xl font-bold text-slate-900 tracking-tight">경력 기술서</h1>
-              <div className="w-10 h-1 bg-indigo-400 rounded-full mt-2" />
             </div>
           )}
           {pageIdx > 0 && (
