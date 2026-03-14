@@ -74,6 +74,12 @@ export interface CustomSectionItem {
   entries: CustomSectionEntry[]
 }
 
+export type SectionKey = 'introduction' | 'careers' | 'educations' | 'skills' | 'certificates' | 'customSections'
+
+export const DEFAULT_SECTION_ORDER: SectionKey[] = [
+  'introduction', 'careers', 'educations', 'skills', 'certificates', 'customSections',
+]
+
 export interface ResumeData {
   personalInfo: PersonalInfo
   introduction: string
@@ -83,4 +89,5 @@ export interface ResumeData {
   certificates: CertificateItem[]
   customSections: CustomSectionItem[]
   careerDescriptions: CareerDescriptionItem[]
+  sectionOrder: SectionKey[]
 }
