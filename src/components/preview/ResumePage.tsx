@@ -62,8 +62,11 @@ export default function ResumePage({ data }: Props) {
                   <div className="flex-1">
                     <div className="flex items-baseline gap-2 flex-wrap">
                       <span className="font-semibold text-slate-800">{edu.school}</span>
+                      {edu.isCurrent && (
+                        <span className="text-xs text-indigo-500 font-medium border border-indigo-300 px-1.5 py-0.5 rounded leading-none">재학중</span>
+                      )}
                       {edu.major && <span className="text-slate-500 text-xs">{edu.major}</span>}
-                      {edu.degree && <span className="text-xs text-slate-400">| {edu.degree}</span>}
+                      {edu.degree && <span className="text-xs text-slate-400">| {edu.degree}{edu.graduationStatus ? ` | ${edu.graduationStatus}` : ''}</span>}
                       {edu.gpa && <span className="text-slate-400 text-xs">GPA {edu.gpa}</span>}
                     </div>
                   </div>

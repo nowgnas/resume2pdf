@@ -23,6 +23,7 @@ export interface EducationItem {
   school: string
   major: string
   degree: string
+  graduationStatus: string
   startDate: string
   endDate: string
   isCurrent: boolean

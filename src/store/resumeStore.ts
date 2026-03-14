@@ -35,7 +35,7 @@ const sampleData: ResumeData = {
     { id: generateId(), company: '(주)스타트업', department: '개발팀', position: '풀스택 개발자', startDate: '2018.06', endDate: '2020.02', isCurrent: false, description: '웹 서비스 개발 및 유지보수' },
   ],
   educations: [
-    { id: generateId(), school: '한국대학교', major: '컴퓨터공학과', degree: '학사', startDate: '2014.03', endDate: '2018.02', isCurrent: false, gpa: '3.8 / 4.5' },
+    { id: generateId(), school: '한국대학교', major: '컴퓨터공학과', degree: '학사', graduationStatus: '졸업', startDate: '2014.03', endDate: '2018.02', isCurrent: false, gpa: '3.8 / 4.5' },
   ],
   skills: [
     { id: generateId(), category: '언어', skills: 'Python, TypeScript, Java' },
@@ -114,7 +114,7 @@ export function useResumeStore() {
 
   // ── Education ──────────────────────────────────────────────────────────────
   const addEducation = () => {
-    const item: EducationItem = { id: generateId(), school: '', major: '', degree: '학사', startDate: '', endDate: '', isCurrent: false, gpa: '' }
+    const item: EducationItem = { id: generateId(), school: '', major: '', degree: '학사', graduationStatus: '졸업', startDate: '', endDate: '', isCurrent: false, gpa: '' }
     setData(prev => ({ ...prev, educations: [...prev.educations, item] }))
   }
   const updateEducation = (id: string, field: keyof EducationItem, value: string | boolean) => {
