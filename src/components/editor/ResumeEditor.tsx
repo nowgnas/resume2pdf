@@ -97,8 +97,14 @@ export default function ResumeEditor({ store }: Props) {
                         <option>학사</option><option>석사</option><option>박사</option><option>전문학사</option><option>고졸</option>
                       </select>
                     </div>
-                    <FormInput label="학점" value={edu.gpa} onChange={v => updateEducation(edu.id, 'gpa', v)} placeholder="3.8 / 4.5" />
+                    <div>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">졸업 상태</label>
+                      <select value={edu.graduationStatus ?? '졸업'} onChange={e => updateEducation(edu.id, 'graduationStatus', e.target.value)} className="w-full px-2.5 py-1.5 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-400 bg-white">
+                        <option>졸업</option><option>재학</option><option>휴학</option><option>수료</option><option>중퇴</option>
+                      </select>
+                    </div>
                   </div>
+                  <FormInput label="학점" value={edu.gpa} onChange={v => updateEducation(edu.id, 'gpa', v)} placeholder="3.8 / 4.5" />
                   <div className="grid grid-cols-2 gap-2">
                     <FormInput label="입학" value={edu.startDate} onChange={v => updateEducation(edu.id, 'startDate', v)} placeholder="2014.03" />
                     <div>
