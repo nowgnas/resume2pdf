@@ -75,6 +75,15 @@ function normalizeData(data: ResumeData): ResumeData {
   if (!data.customSections) data.customSections = []
   if (!data.careerDescriptions) data.careerDescriptions = []
 
+  // customSections 내 entries에 isLink 필드가 없으면 기본값 추가
+  data.customSections = data.customSections.map(section => ({
+    ...section,
+    entries: section.entries.map(entry => ({
+      ...entry,
+      isLink: entry.isLink ?? false,
+    })),
+  }))
+
   // sectionOrder에 없는 기본 섹션 추가 (새 카테고리가 생겼을 때 자동 포함)
   if (!data.sectionOrder) {
     data.sectionOrder = [...DEFAULT_SECTION_ORDER]
@@ -197,7 +206,7 @@ export function useResumeStore() {
   }
 
   const addCustomEntry = (sectionId: string) => {
-    const item: CustomSectionEntry = { id: generateId(), startDate: '', endDate: '', name: '', description: '' }
+    const item: CustomSectionEntry = { id: generateId(), startDate: '', endDate: '', name: '', description: '', isLink: false }
     setData(prev => ({
       ...prev,
       customSections: prev.customSections.map(s =>
@@ -205,7 +214,7 @@ export function useResumeStore() {
       ),
     }))
   }
-  const updateCustomEntry = (sectionId: string, entryId: string, field: keyof CustomSectionEntry, value: string) => {
+  const updateCustomEntry = (sectionId: string, entryId: string, field: keyof CustomSectionEntry, value: string | boolean) => {
     setData(prev => ({
       ...prev,
       customSections: prev.customSections.map(s =>
