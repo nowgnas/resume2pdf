@@ -225,7 +225,17 @@ export default function ResumeEditor({ store }: Props) {
                             <FormInput label="시작 날짜" value={entry.startDate} onChange={v => updateCustomEntry(section.id, entry.id, 'startDate', v)} placeholder="2023.03" />
                             <FormInput label="종료 날짜 (선택)" value={entry.endDate} onChange={v => updateCustomEntry(section.id, entry.id, 'endDate', v)} placeholder="2023.06" />
                           </div>
-                          <FormRichTextarea label="설명" value={entry.description} onChange={v => updateCustomEntry(section.id, entry.id, 'description', v)} placeholder="설명을 입력하세요..." rows={2} />
+                          <div>
+                            {entry.isLink ? (
+                              <FormInput label="링크 URL" value={entry.description} onChange={v => updateCustomEntry(section.id, entry.id, 'description', v)} placeholder="https://..." />
+                            ) : (
+                              <FormRichTextarea label="설명" value={entry.description} onChange={v => updateCustomEntry(section.id, entry.id, 'description', v)} placeholder="설명을 입력하세요..." rows={2} />
+                            )}
+                            <label className="flex items-center gap-1.5 mt-1 cursor-pointer">
+                              <input type="checkbox" checked={entry.isLink ?? false} onChange={e => updateCustomEntry(section.id, entry.id, 'isLink', e.target.checked)} className="rounded" />
+                              <span className="text-xs text-gray-500">링크로 저장 (PDF에서 클릭 가능)</span>
+                            </label>
+                          </div>
                         </ItemCard>
                       )}
                     />

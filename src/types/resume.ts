@@ -76,6 +76,7 @@ export interface CustomSectionEntry {
   endDate: string
   name: string
   description: string
+  isLink: boolean
 }
 
 export interface CustomSectionItem {
