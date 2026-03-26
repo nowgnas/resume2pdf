@@ -58,6 +58,7 @@ export interface ProjectItem {
   description: string
   techStack: string
   achievements: string
+  contribution?: string
   image?: string // base64 or url
 }
 

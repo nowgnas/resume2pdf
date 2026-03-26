@@ -61,6 +61,7 @@ export default function CareerDescEditor({ store }: Props) {
                     <FormRichTextarea label="프로젝트 설명" value={project.description} onChange={v => updateProject(cd.id, project.id, 'description', v)} placeholder="프로젝트 개요 및 담당 역할을 설명하세요..." rows={3} />
                     <FormInput label="기술 스택 (쉼표로 구분)" value={project.techStack} onChange={v => updateProject(cd.id, project.id, 'techStack', v)} placeholder="Python, FastAPI, PostgreSQL" />
                     <FormRichTextarea label="주요 성과" value={project.achievements} onChange={v => updateProject(cd.id, project.id, 'achievements', v)} placeholder="• 성과 1&#10;• 성과 2" rows={3} />
+                    <FormInput label="기여도" value={project.contribution || ''} onChange={v => updateProject(cd.id, project.id, 'contribution', v)} placeholder="예: 70%, 핵심 개발자, 팀 리드 등" />
                     <ProjectImageUpload image={project.image || ''} onChange={v => updateProject(cd.id, project.id, 'image', v)} />
                   </ItemCard>
                 )}

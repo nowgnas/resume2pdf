@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import type { CareerDescriptionItem } from '../../types/resume'
+import ImageLightbox from './ImageLightbox'
 
 interface Props {
   careerDescriptions: CareerDescriptionItem[]
@@ -10,12 +12,21 @@ const A4_HEIGHT = 1123
 const PAGE_CONTENT_HEIGHT = A4_HEIGHT - 96 // 48px top + 48px bottom padding
 
 export default function CareerDescriptionPages({ careerDescriptions }: Props) {
+  const [lightboxImage, setLightboxImage] = useState<{ src: string; alt: string } | null>(null)
+
   if (careerDescriptions.length === 0) return null
 
   const pages = buildPages(careerDescriptions)
 
   return (
     <>
+      {lightboxImage && (
+        <ImageLightbox
+          src={lightboxImage.src}
+          alt={lightboxImage.alt}
+          onClose={() => setLightboxImage(null)}
+        />
+      )}
       {pages.map((pageContent, pageIdx) => (
         <div
           key={pageIdx}
@@ -34,7 +45,7 @@ export default function CareerDescriptionPages({ careerDescriptions }: Props) {
           )}
 
           {pageContent.map((item, idx) => (
-            <CareerDescSection key={`${pageIdx}-${idx}`} item={item} />
+            <CareerDescSection key={`${pageIdx}-${idx}`} item={item} onImageClick={(src, alt) => setLightboxImage({ src, alt })} />
           ))}
         </div>
       ))}
@@ -42,7 +53,7 @@ export default function CareerDescriptionPages({ careerDescriptions }: Props) {
   )
 }
 
-function CareerDescSection({ item }: { item: CareerDescriptionItem }) {
+function CareerDescSection({ item, onImageClick }: { item: CareerDescriptionItem; onImageClick: (src: string, alt: string) => void }) {
   return (
     <div className="mb-8">
       {/* Company Header */}
@@ -63,55 +74,55 @@ function CareerDescSection({ item }: { item: CareerDescriptionItem }) {
       <div className="space-y-4 ml-5">
         {item.projects.map((project) => (
           <div key={project.id} className="rounded-xl border border-slate-100 bg-slate-50 p-4">
-            {/* Project header + image */}
-            <div className="flex gap-4">
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-2 flex-wrap">
-                  <h3 className="font-semibold text-slate-800 text-sm">{project.name}</h3>
-                  {project.period && (
-                    <span className="text-xs text-slate-400">{project.period}</span>
-                  )}
-                </div>
-
-                {project.description && (
-                  <p className="rich-content text-xs text-slate-600 leading-relaxed mb-3" dangerouslySetInnerHTML={{ __html: project.description }} />
-                )}
-
-                {project.techStack && (
-                  <div className="flex gap-2 mb-3 items-start">
-                    <span className="text-xs font-semibold text-slate-400 shrink-0 w-14 pt-0.5">기술 스택</span>
-                    <div className="flex flex-wrap gap-1">
-                      {project.techStack.split(',').map((tech, i, arr) => (
-                        <span
-                          key={i}
-                          className="text-xs text-indigo-600 font-medium"
-                        >
-                          {tech.trim()}{i < arr.length - 1 ? ' ·' : ''}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {project.achievements && (
-                  <div className="flex gap-2 items-start">
-                    <span className="text-xs font-semibold text-slate-400 shrink-0 w-14 pt-0.5">주요 성과</span>
-                    <p className="rich-content text-xs text-slate-600 leading-relaxed" dangerouslySetInnerHTML={{ __html: project.achievements }} />
-                  </div>
-                )}
-              </div>
-
-              {/* Project Image */}
-              {project.image && (
-                <div className="shrink-0 self-start">
-                  <img
-                    src={project.image}
-                    alt={`${project.name} 이미지`}
-                    className="w-32 h-20 object-cover rounded-lg border border-slate-200"
-                  />
-                </div>
+            <div className="flex items-center gap-2 mb-2 flex-wrap">
+              <h3 className="font-semibold text-slate-800 text-sm">{project.name}</h3>
+              {project.period && (
+                <span className="text-xs text-slate-400">{project.period}</span>
+              )}
+              {project.contribution && (
+                <span className="text-xs text-emerald-600 font-medium">
+                  기여도 {project.contribution}
+                </span>
               )}
             </div>
+
+            {project.image && (
+              <div className="mb-3">
+                <img
+                  src={project.image}
+                  alt={`${project.name} 이미지`}
+                  className="w-full max-h-64 object-contain rounded-lg border border-slate-200 cursor-pointer hover:opacity-90 transition-opacity"
+                  onClick={() => onImageClick(project.image!, `${project.name} 이미지`)}
+                />
+              </div>
+            )}
+
+            {project.description && (
+              <p className="rich-content text-xs text-slate-600 leading-relaxed mb-3" dangerouslySetInnerHTML={{ __html: project.description }} />
+            )}
+
+            {project.techStack && (
+              <div className="flex gap-2 mb-3 items-start">
+                <span className="text-xs font-semibold text-slate-400 shrink-0 w-14 pt-0.5">기술 스택</span>
+                <div className="flex flex-wrap gap-1">
+                  {project.techStack.split(',').map((tech, i, arr) => (
+                    <span
+                      key={i}
+                      className="text-xs text-indigo-600 font-medium"
+                    >
+                      {tech.trim()}{i < arr.length - 1 ? ' ·' : ''}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {project.achievements && (
+              <div className="flex gap-2 items-start">
+                <span className="text-xs font-semibold text-slate-400 shrink-0 w-14 pt-0.5">주요 성과</span>
+                <p className="rich-content text-xs text-slate-600 leading-relaxed" dangerouslySetInnerHTML={{ __html: project.achievements }} />
+              </div>
+            )}
           </div>
         ))}
       </div>
@@ -128,7 +139,7 @@ function buildPages(items: CareerDescriptionItem[]): CareerDescriptionItem[][] {
       h += (p.description.split('\n').length) * 16 + 16
       h += p.techStack ? 24 : 0
       h += p.achievements ? (p.achievements.split('\n').length) * 16 + 8 : 0
-      h += p.image ? 88 : 0 // image height
+      h += p.image ? 270 : 0 // full-width image (max-h-64 = 256px + margin)
       h += 24 // card padding + spacing
     }
     h += 32 // section margin
