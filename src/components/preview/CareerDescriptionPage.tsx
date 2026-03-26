@@ -117,12 +117,6 @@ function CareerDescSection({ item, onImageClick }: { item: CareerDescriptionItem
               </div>
             )}
 
-            {project.achievements && (
-              <div className="flex gap-2 items-start">
-                <span className="text-xs font-semibold text-slate-400 shrink-0 w-14 pt-0.5">주요 성과</span>
-                <p className="rich-content text-xs text-slate-600 leading-relaxed" dangerouslySetInnerHTML={{ __html: project.achievements }} />
-              </div>
-            )}
           </div>
         ))}
       </div>
@@ -138,7 +132,6 @@ function buildPages(items: CareerDescriptionItem[]): CareerDescriptionItem[][] {
       h += 44 // project header
       h += (p.description.split('\n').length) * 16 + 16
       h += p.techStack ? 24 : 0
-      h += p.achievements ? (p.achievements.split('\n').length) * 16 + 8 : 0
       h += p.image ? 270 : 0 // full-width image (max-h-64 = 256px + margin)
       h += 24 // card padding + spacing
     }
